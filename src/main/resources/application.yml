@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: test-service
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: America/Tijuana
+    mapper:
+      default-view-inclusion: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test
+    username: glen
+    password: 1234
+  jpa:
+    show-sql: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+      hibernate.format_sql: false
+      hibernate.show_sql: false
+      hibernate.jdbc.time_zone: America/Tijuana
+
+  flyway:
+    out-of-order: true
+    ignore-missing-migrations: true
+
+  thymeleaf:
+    cache: false
+
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: false

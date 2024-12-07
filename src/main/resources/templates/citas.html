@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtrar Citas</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="container mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-4">Filtrar Citas</h2>
+        <form action="/citas" method="GET">
+            <div class="mb-4">
+                <label for="appointmentTime" class="block text-lg font-medium mb-2">Hora de la cita</label>
+                <input type="time" id="appointmentTime" name="appointmentTime" 
+                       class="w-full p-2 border border-gray-300 rounded" 
+                       min="08:00" max="17:00" required>
+            </div>
+            
+
+            <div class="mb-4">
+                <label for="officeId" class="block text-lg font-medium mb-2">Consultorio</label>
+                <select id="officeId" name="officeId" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="" disabled selected>Seleccione un consultorio</option>
+                    <th:block th:each="office : ${offices}">
+                        <option th:value="${office.officeId}" th:text="${office.officeNumber}"></option>
+                    </th:block>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="doctorId" class="block text-lg font-medium mb-2">Doctor</label>
+                <select id="doctorId" name="doctorId" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="" disabled selected>Seleccione un doctor</option>
+                    <th:block th:each="doctor : ${doctors}">
+                        <option th:value="${doctor.doctorId}" th:text="${doctor.firstName} + ' ' + ${doctor.lastName}"></option>
+                    </th:block>
+                </select>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-lg">Filtrar</button>
+
+        </form>
+
+        <br>
+
+        <h3 class="text-xl font-bold mb-4">Lista de Citas</h3>
+        <div class="mb-4">
+            <table class="table-auto w-full border-collapse">
+                <thead>
+                    <tr>
+                        <th class="border p-2">Consultorio</th>
+                        <th class="border p-2">Doctor</th>
+                        <th class="border p-2">Fecha y Hora</th>
+                        <th class="border p-2">Paciente</th>
+                        <th class="border p-2">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="appointment : ${appointments}">
+                        <tr>
+                            <td class="border p-2" th:text="${appointment.office.officeNumber}"></td>
+                            <td class="border p-2" th:text="${appointment.doctor.firstName} + ' ' + ${appointment.doctor.lastName}"></td>
+                            <td class="border p-2" th:text="${appointment.appointmentTime}"></td>
+                            <td class="border p-2" th:text="${appointment.patientName}"></td>
+                            <td class="border p-2">
+                                <!-- Editar -->
+                                <a th:href="@{/appointments/edit/{appointmentId}(appointmentId=${appointment.appointmentId})}" 
+                                   class="bg-blue-500 text-white px-4 py-2 rounded">Editar</a>
+                            
+                                <!-- Cancelar -->
+                                <form th:action="@{/appointments/cancel/{appointmentId}(appointmentId=${appointment.appointmentId})}" 
+                                      method="POST" class="inline">
+                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Cancelar</button>
+                                </form>
+                            </td>
+                            
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

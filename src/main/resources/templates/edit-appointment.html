@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Cita</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="container mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-4">Editar Cita</h2>
+        <form action="/appointments/edit/{appointment.appointmentId}" method="POST">
+            <div class="mb-4">
+                <label for="office" class="block text-lg font-medium mb-2">Consultorio</label>
+                <select id="office" name="office" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="" disabled selected>Seleccione un consultorio</option>
+                    <th:block th:each="office : ${offices}">
+                        <option th:value="${office.officeId}" th:text="${office.officeNumber}" th:selected="${office.officeId == appointment.office.officeId}"></option>
+                    </th:block>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="doctor" class="block text-lg font-medium mb-2">Doctor</label>
+                <select id="doctor" name="doctor" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="" disabled selected>Seleccione un doctor</option>
+                    <th:block th:each="doctor : ${doctors}">
+                        <option th:value="${doctor.doctorId}" th:text="${doctor.firstName} + ' ' + ${doctor.lastName}" th:selected="${doctor.doctorId == appointment.doctor.doctorId}"></option>
+                    </th:block>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="appointmentTime" class="block text-lg font-medium mb-2">Horario de consulta</label>
+                <select id="appointmentTime" name="appointmentTime" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="" disabled selected>Seleccione la hora</option>
+                    <option th:each="hour : ${#numbers.sequence(8, 17)}"
+                            th:value="${hour}" 
+                            th:text="${hour} + ':00'" th:selected="${hour + ':00' == appointment.appointmentTime}"></option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="patientName" class="block text-lg font-medium mb-2">Nombre del paciente</label>
+                <input type="text" id="patientName" name="patientName" class="w-full p-2 border border-gray-300 rounded" th:value="${appointment.patientName}" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-lg">Actualizar Cita</button>
+        </form>
+    </div>
+</body>
+</html>
